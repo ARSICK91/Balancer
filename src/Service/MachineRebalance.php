@@ -24,7 +24,10 @@ class MachineRebalance
         $this->machineRepository = $machineRepository;
         $this->entityManager = $entityManager;
     }
-
+    public function addMachine(Machine $machine): bool
+    {
+        return false;
+    }
     public function canRemoveMachine(Machine $machine): bool
 {
     $processes = $machine->getMyProcesses()->toArray();
@@ -49,7 +52,7 @@ class MachineRebalance
     
         if (empty($machinesToMove)) {
             $this->rollbackProcesses($processesToMove);
-            return false; // Не удалось перенести хотя бы один процесс
+            return false; 
         }
     
         $machinesToMove = $this->sortBalanceMachine($machinesToMove);
@@ -64,10 +67,10 @@ class MachineRebalance
     foreach ($processes as $process) {
         $machine->removeMyProcess($process);
     }
+    $this->machineRepository->remove($machine);
+    $this->entityManager->flush(); 
     
-    $this->entityManager->flush(); // Сохраняем изменения в базе данных
-    
-    return true; // Все процессы успешно перенесены
+    return true; 
 }
     
     private function sortBalanceProcess(array $processes): array
@@ -93,7 +96,7 @@ class MachineRebalance
     
         return $machines;
     }
-    
+
     private function rollbackProcesses(array $processesToMove): void
     {
         foreach ($processesToMove as $entry) {
