@@ -10,9 +10,10 @@
 1. Клонируйте репозиторий:
 
    ```bash
-   git clone https://github.com/ваш_пользователь/ваш_репозиторий.git
-   cd ваш_репозиторий
+   git clone git@github.com:ARSICK91/Balancer.git
+   cd Balancer
 2. ```
     cp .env.example .env
-3. docker-compose up --build
+3. ```
+    docker-compose up --build
 
