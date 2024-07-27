@@ -97,12 +97,21 @@ class Machine
     public function removeMyProcess(Process $myProcess): static
     {
         if ($this->my_processes->removeElement($myProcess)) {
-            // set the owning side to null (unless already changed)
+            
             if ($myProcess->getMyMachine() === $this) {
                 $myProcess->setMyMachine(null);
             }
         }
 
         return $this;
+    }
+
+    private function balancer(): ?int
+    {
+        $myProcesses = $this->getMyProcesses()->toArray();
+        $currentMemoryUsage = array_sum(array_map(fn($p) => $p->getTotalMemory(), $myProcesses));
+        $currentCpuUsage = array_sum(array_map(fn($p) => $p->getTotalCore(), $myProcesses));
+
+        return $this->total_memory- $currentMemoryUsage - $currentCpuUsage + $this->total_core;
     }
 }

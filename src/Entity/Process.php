@@ -62,4 +62,8 @@ class Process
 
         return $this;
     }
+    public function balance(): ?int
+    {
+        return $this->need_memory - $this->need_core;
+    }
 }
