@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Processes{% endblock %}
+
+{% block body %}
+    <h1>Processes</h1>
+    {% if machines %}
+    {{machines}}
+    {% else %}
+    <h1>ДИСАСИ</h1>
+    {%endif%}
+    <a href="{{ path('add_machine') }}">Добавить новую машину</a>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Memory</th>
+            <th>CPU</th>
+        </tr>
+    </table>
+{% endblock %}
