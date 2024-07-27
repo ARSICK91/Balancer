@@ -13,11 +13,20 @@ class MachineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class)
-            ->add('total_memory', IntegerType::class)
-            ->add('total_core', IntegerType::class);
+            ->add('name', TextType::class, [
+                'label' => 'Название машины',
+                'attr' => ['placeholder' => 'Введите название'],
+            ])
+            ->add('total_memory', IntegerType::class, [
+                'label' => 'Общая память',
+                'attr' => ['placeholder' => 'Введите общий объем памяти'],
+            ])
+            ->add('total_core', IntegerType::class, [
+                'label' => 'Общее количество ядер',
+                'attr' => ['placeholder' => 'Введите количество ядер'],
+            ]);
     }
-
+    
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

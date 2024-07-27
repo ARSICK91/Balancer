@@ -7,7 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\MachineRepository;
 use App\Repository\ProcessRepository;
-
+use App\Entity\Process;
+use App\Entity\Machine;
 
 class MainController extends AbstractController
 {

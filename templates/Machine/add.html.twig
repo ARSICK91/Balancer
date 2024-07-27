@@ -4,6 +4,9 @@
 
 {% block body %}
     <h1>Добавить машину</h1>
-
+     {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">Добавить</button>
+    {{ form_end(form) }}
     <a href="{{ path('main-table') }}">Назад к списку машин</a>
 {% endblock %}

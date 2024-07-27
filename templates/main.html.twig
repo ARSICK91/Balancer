@@ -5,7 +5,14 @@
 {% block body %}
     <h1>Processes</h1>
     {% if machines %}
-    {{machines}}
+        {% for machine in machines %}
+            <div class="machine">
+                {{machine.name}}
+                {{machine.TotalMemory}}                
+                {{machine.TotalCore}}
+                <a href="{{ path('delete_machine', { id: machine.id }) }}">Удалить машину</a>
+            </div>
+        {%endfor%}
     {% else %}
     <h1>ДИСАСИ</h1>
     {%endif%}

@@ -14,8 +14,24 @@ class MachineRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Machine::class);
+        $this->entityManager = $registry->getManager();
     }
+    public function add(Machine $machine, bool $flush = true): void
+    {
+        $this->entityManager->persist($machine);
 
+        if ($flush) {
+            $this->entityManager->flush();
+        }
+    }
+    public function remove(Machine $machine, bool $flush = true): void
+    {
+        $this->entityManager->remove($machine);
+
+        if ($flush) {
+            $this->entityManager->flush();
+        }
+    }
     public function find_machine(int $id): ?Machine
     {
         return $this->findOneBy(["id"=> $id]);
