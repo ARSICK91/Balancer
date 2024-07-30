@@ -37,9 +37,8 @@
     CREATE DATABASE test_balancer_bd;
 11. ```
     exit
-    
 12. ```
-    docker exec -it main_php php bin/console doctrine:migrations:migrate --no-interaction
+    docker exec -it php-fpm php bin/console doctrine:migrations:migrate --no-interaction
 13. ```
     docker-compose -f ./docker/docker-compose.yml down
     docker-compose -f ./docker/docker-compose.yml build
