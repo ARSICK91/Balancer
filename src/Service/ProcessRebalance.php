@@ -19,11 +19,9 @@ class ProcessRebalance
         $this->machineRepository = $machineRepository;
         $this->em = $em;
     }
-    //Переделать под репозиторий
 
     public function addProcess(int $NeedCore, int $NeedMemory): void
     {
-        //Переделать под репозиторий
         $process = new Process();
         $process->setNeedMemory($NeedMemory);
         $process->setNeedCore($NeedCore);

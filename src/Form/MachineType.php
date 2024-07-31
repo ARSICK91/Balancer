@@ -16,14 +16,17 @@ class MachineType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Название машины',
                 'attr' => ['placeholder' => 'Введите название'],
+                'required' => true,
             ])
             ->add('total_memory', IntegerType::class, [
                 'label' => 'Общая память',
                 'attr' => ['placeholder' => 'Введите общий объем памяти'],
+                'required' => true, 
             ])
             ->add('total_core', IntegerType::class, [
                 'label' => 'Общее количество ядер',
                 'attr' => ['placeholder' => 'Введите количество ядер'],
+                'required' => true, 
             ]);
     }
     

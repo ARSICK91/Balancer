@@ -22,13 +22,95 @@ class AllRebalance{
         $this->machineRepository = $machineRepository;
         $this->entityManager = $entityManager;
     }
-    public function AllRebalance(Process $process = null, Machine $machine = null): bool
+
+    private function balanceAllProcesses(): bool
     {
-        $process ??= new Process();
-        $machine ??= new Machine();
-        //короче адаптировать тута  эту функцию но только вообще для всех процессов public function canRemoveMachine(Machine $machine): bool
+        return true;
+        // $machines = $this->machineRepository->findAll();
+        // $processes = $this->processRepository->findAll();
+        // $processesToMove = [];
 
+        // // Сортируем все процессы
+        // $processes = $this->sortBalanceProcess($processes);
 
-        return true; 
+        // foreach ($processes as $process) {
+        //     $machinesToMove = [];
+
+        //     foreach ($machines as $targetMachine) {
+        //         if ($this->canAddProcess($targetMachine, $process)) {
+        //             $machinesToMove[] = $targetMachine;
+        //         }
+        //     }
+
+        //     if (empty($machinesToMove)) {
+        //         $this->rollbackProcesses($processesToMove);
+        //         return false;
+        //     }
+
+        //     $machinesToMove = $this->sortBalanceMachine($machinesToMove);
+        //     $targetMachine = ($process->balancer() >= 0) ? $machinesToMove[0] : end($machinesToMove);
+        //     $targetMachine->addMyProcess($process);
+        //     $processesToMove[] = [
+        //         'process' => $process,
+        //         'machine' => $targetMachine
+        //     ];
+        // }
+
+        // $this->entityManager->flush();
+        // return true;
+    }
+    private function sortBalanceProcess(array $processes): array
+    {
+        usort(
+            $processes,
+            function (Process $a, Process $b): int {
+                return $a->balance() <=> $b->balance();
+            }
+        );
+    
+        return $processes;
+    }
+    
+    private function sortBalanceMachine(array $machines): array
+    {
+        usort(
+            $machines,
+            function (Machine $a, Machine $b): int {
+                return $a->balancer() <=> $b->balancer();
+            }
+        );
+    
+        return $machines;
+    }
+
+    private function rollbackProcesses(array $processesToMove): void
+    {
+        foreach ($processesToMove as $entry) {
+            $process = $entry['process'];
+            $machine = $entry['machine'];
+            $machine->removeMyProcess($process); 
+        }
+    
+        $this->entityManager->flush(); 
+    }
+
+    private function canAddProcess(Machine $machine, Process $process): bool
+    {
+        [$availableMemory, $availableCpu] = $this->calculateLoad($machine, $process);
+        return $availableMemory >= 0 && $availableCpu >= 0;
+    }
+
+    private function calculateLoad(Machine $machine, Process $process): array
+    {
+        $currentMemoryUsage = array_sum(array_map(fn($p) => $p->getTotalMemory(), $machine->getMyProcesses()->toArray()));
+        $currentCpuUsage = array_sum(array_map(fn($p) => $p->getTotalCore(), $machine->getMyProcesses()->toArray()));
+
+        $processMemoryUsage = $process->getNeedMemory();
+        $processCpuUsage = $process->getNeedCore();
+
+        return [
+            $currentMemoryUsage + $processMemoryUsage,
+            $currentCpuUsage + $processCpuUsage
+        ];
     }
 }

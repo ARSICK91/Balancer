@@ -3,11 +3,17 @@ version: "3.8"
 services:
   php-fpm:
     container_name: php-fpm
+    environment:
+      PHP_MEMORY_LIMIT: "512M"
     build:
       context: ./../
       dockerfile: ./docker/php-fpm/Dockerfile
     volumes:
       - ./../:/var/www/
+    command: >
+      sh -c "sleep 3 && php bin/console doctrine:migrations:migrate --no-interaction && php-fpm"
+    depends_on:
+      - db
 
   nginx:
     container_name: nginx
@@ -25,6 +31,7 @@ services:
     container_name: main_bd
     environment:
       MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: test_balancer_bd
     volumes:
       - db_data:/var/lib/mysql
     ports:
@@ -32,3 +39,4 @@ services:
 
 volumes:
   db_data:
+

@@ -11,7 +11,7 @@ use App\Repository\MachineRepository;
 class MachineAdd extends AbstractController
 {
     #[Route('/machine/add', name: "add_machine")]
-    public function add(Request $request, EntityManagerInterface $entityManager,MachineRepository $machineRepository)
+    public function add(Request $request,MachineRepository $machineRepository)
     {
 
         $machine = new Machine();
@@ -19,9 +19,17 @@ class MachineAdd extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) 
         {
-            $machineRepository->add($machine);
-            return $this->redirectToRoute('main-table');
+            if($machineRepository->add($machine)) {
+                return $this->redirectToRoute('main-table');
+            }
+            $this->addFlash('error', 'Не удалось добавить машину');
+        } else {
+            $errors = $form->getErrors(true, false);
+            foreach ($errors as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
         }
+        
         
         return $this->render("Machine/add.html.twig", ['form'=>$form->createView()]);
     }
