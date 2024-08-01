@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+ {% for label, messages in app.flashes %}
+       <div class="flash-message flash-{{ label }}">
+           {% for message in messages %}
+               <p>{{ message }}</p>
+           {% endfor %}
+       </div>
+   {% endfor %}
+    <h1>Удалить процесс</h1>
+    <p>Вы уверены, что хотите удалить процесс "{{ process.id }}"?</p>
+
+    <form method="post">
+        <button type="submit">Удалить</button>
+        <a href="{{ path('main-table') }}">Отмена</a>
+    </form>
+{% endblock %}

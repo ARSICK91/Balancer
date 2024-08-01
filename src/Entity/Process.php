@@ -62,6 +62,11 @@ class Process
 
         return $this;
     }
+    public function delMyMachine(): static
+    {
+        $this->my_machine = null;
+        return $this;
+    }
     public function balance(): ?int
     {
         return $this->need_memory - $this->need_core;

@@ -106,11 +106,11 @@ class Machine
         return $this;
     }
 
-    private function balancer(): ?int
+    public function balancer(): ?int
     {
         $myProcesses = $this->getMyProcesses()->toArray();
-        $currentMemoryUsage = array_sum(array_map(fn($p) => $p->getTotalMemory(), $myProcesses));
-        $currentCpuUsage = array_sum(array_map(fn($p) => $p->getTotalCore(), $myProcesses));
+        $currentMemoryUsage = array_sum(array_map(fn($p) => $p->getNeedMemory(), $myProcesses));
+        $currentCpuUsage = array_sum(array_map(fn($p) => $p->getNeedCore(), $myProcesses));
 
         return $this->total_memory- $currentMemoryUsage - $currentCpuUsage + $this->total_core;
     }

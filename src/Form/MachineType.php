@@ -14,19 +14,35 @@ class MachineType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Название машины',
-                'attr' => ['placeholder' => 'Введите название'],
+                'label' => 'Название машины: ',
+                'attr' => [
+                    'placeholder' => 'Введите название',
+                    'class' =>'text-input',
+                ],
+                'required' => true, 
             ])
             ->add('total_memory', IntegerType::class, [
                 'label' => 'Общая память',
-                'attr' => ['placeholder' => 'Введите общий объем памяти'],
+                'attr' => [
+                    'placeholder' => 'Введите общий объем памяти: ',
+                    'min' => 1, 
+                    'class' =>'int-input',
+
+                ],
+                'required' => true, 
             ])
             ->add('total_core', IntegerType::class, [
-                'label' => 'Общее количество ядер',
-                'attr' => ['placeholder' => 'Введите количество ядер'],
+                'label' => 'Общее количество ядер: ',
+                'attr' => [
+                    'placeholder' => 'Введите количество ядер',
+                    'min' => 1, 
+                    'class' =>'int-input',
+
+                ],
+                'required' => true, 
             ]);
     }
-    
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

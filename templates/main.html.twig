@@ -3,25 +3,53 @@
 {% block title %}Processes{% endblock %}
 
 {% block body %}
-    <h1>Processes</h1>
+<div class = 'column-flex'>
+    {% for label, messages in app.flashes %}
+        <div class="flash-message flash-{{label}}">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <div class = 'column-flex'>
+        <h1>Машины и процессы</h1>
+        <a href="{{ path('add_machine') }}" class = 'add'>Добавить новую машину</a>
+        <a href = "{{path('add_process')}}" class = 'add'>Добавить новый процесс</a>
+    </div>
     {% if machines %}
         {% for machine in machines %}
-            <div class="machine">
-                {{machine.name}}
-                {{machine.TotalMemory}}                
-                {{machine.TotalCore}}
-                <a href="{{ path('delete_machine', { id: machine.id }) }}">Удалить машину</a>
+            <div class="row-flex">
+                <p>{{machine.name}}</p>
+                <p>Всего памяти: {{machine.TotalMemory}}</p>                
+                <p>Всего ядер: {{machine.TotalCore}}</p>
+                <a href="{{ path('delete_machine', { id: machine.id }) }}" class = 'del'>Удалить машину</a>
             </div>
+             {% if machine.MyProcesses|length > 0 %}
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Потребляет памяти</th>
+                        <th>Потребляет ядер</th>
+                    </tr>
+                    {% for process in machine.MyProcesses %}
+                    
+                    <tr>
+                        <td>{{process.Id}}</td>
+                        <td>{{process.NeedMemory}}</td>
+                        <td>{{process.NeedCore}}</td>
+                        <td><a href="{{ path('delete_process', { id: process.Id }) }}" class = 'del'>Удалить процесс</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <hr>
+            {% else %}
+            <p>У машины нет процессов</p>
+            <hr>
+            {% endif %}
         {%endfor%}
     {% else %}
-    <h1>ДИСАСИ</h1>
+        <h1>На данный момент нет машин</h1>
     {%endif%}
-    <a href="{{ path('add_machine') }}">Добавить новую машину</a>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Memory</th>
-            <th>CPU</th>
-        </tr>
-    </table>
+</div>
+
 {% endblock %}
